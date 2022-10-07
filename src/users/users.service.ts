@@ -17,6 +17,10 @@ export class UsersService {
     throw new Error('Method not implemented.');
   }
 
+  async login(email: string, password: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+
   private async checkUserExists(email: string) {
     return false;
   }
