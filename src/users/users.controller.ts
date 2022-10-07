@@ -29,7 +29,6 @@ export class UsersController {
 
   @Get('/:id')
   async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
-    console.log(userId);
-    return;
+    return await this.usersService.getUserInfo(userId);
   }
 }
