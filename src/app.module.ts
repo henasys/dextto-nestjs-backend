@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import * as winston from 'winston';
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
 
 import { UsersModule } from './users/users.module';
 import emailConfig from './config/email.config';
@@ -27,6 +32,19 @@ import { validationSchema } from './config/validation.schema';
       synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE),
     }),
     // TypeOrmModule.forRoot(),
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            nestWinstonModuleUtilities.format.nestLike('MyApp', {
+              prettyPrint: true,
+            }),
+          ),
+        }),
+      ],
+    }),
   ],
   controllers: [],
   providers: [],
