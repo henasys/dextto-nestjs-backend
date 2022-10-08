@@ -48,7 +48,16 @@ export class UsersService {
   }
 
   async login(email: string, password: string): Promise<string> {
-    throw new Error('Method not implemented.');
+    const user = await this.usersRepository.findOneBy({ email, password });
+    if (!user) {
+      throw new NotFoundException('User가 존재하지 않습니다.');
+    }
+
+    return this.authService.login({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    });
   }
 
   async getUserInfo(userId: string): Promise<UserInfo> {
