@@ -36,6 +36,7 @@ export class UsersService {
 
   async verifyEmail(signupVerifyToken: string): Promise<string> {
     const user = await this.usersRepository.findOneBy({ signupVerifyToken });
+
     if (!user) {
       throw new NotFoundException('User가 존재하지 않습니다.');
     }
@@ -49,6 +50,7 @@ export class UsersService {
 
   async login(email: string, password: string): Promise<string> {
     const user = await this.usersRepository.findOneBy({ email, password });
+
     if (!user) {
       throw new NotFoundException('User가 존재하지 않습니다.');
     }
@@ -61,7 +63,17 @@ export class UsersService {
   }
 
   async getUserInfo(userId: string): Promise<UserInfo> {
-    throw new Error('Method not implemented.');
+    const user = await this.usersRepository.findOneBy({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException('User가 존재하지 않습니다');
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
   }
 
   private async checkUserExists(email: string): Promise<boolean> {
